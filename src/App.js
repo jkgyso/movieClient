@@ -8,7 +8,6 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import MovieList from './pages/Movies';
 import MovieView from './pages/MovieView';
-import AddMovie from './pages/AddMovie';
 import Error from './pages/Error';
 import { UserProvider } from './UserContext';
 
@@ -47,7 +46,7 @@ function App() {
   return (
     <UserProvider value={{ user, setUser, unsetUser }}>
       <Router>
-        <AppNavbar /> {/* Ensure this is correctly imported */}
+        <AppNavbar />
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -56,7 +55,6 @@ function App() {
             <Route path="/logout" element={<Logout />} />
             <Route path="/movies/getMovies" element={<MovieList />} />
             <Route exact="true" path="/movies/getMovie/:movieId" element={<MovieView />} />
-            <Route path="/movies/addMovie" element={<AddMovie />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </Container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Container, Card, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
@@ -13,7 +13,7 @@ const MovieView = () => {
   const [error, setError] = useState('');
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(null);
-  const [showAlert, setShowAlert] = useState(false); // State for showing the alert
+  const [showAlert, setShowAlert] = useState(false);
 
   const [loadingMovie, setLoadingMovie] = useState(true);
   const [loadingComments, setLoadingComments] = useState(true);
@@ -44,7 +44,7 @@ const MovieView = () => {
     fetchMovie();
   }, [movieId, navigate]);
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`https://movieappapi-6awg.onrender.com/movies/getComments/${movieId}`, {
         headers: {
@@ -64,7 +64,7 @@ const MovieView = () => {
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
-  };
+  }, [movieId]);
 
   const handleCommentChange = e => {
     setComment(e.target.value);
@@ -92,10 +92,9 @@ const MovieView = () => {
         }));
         setComments(commentsToShow);
 
-        // Show Bootstrap Alert for success
         setShowAlert(true);
 
-        fetchComments();
+        fetchComments(); // Ensure to fetch comments after adding a new comment
       } else {
         console.error('Updated comments missing in response:', data);
       }
@@ -107,8 +106,8 @@ const MovieView = () => {
   };
 
   useEffect(() => {
-    fetchComments();
-  }, [movieId]);
+    fetchComments(); // Fetch comments initially and whenever movieId changes
+  }, [movieId, fetchComments]);
 
   if (!user.id) {
     navigate('/login');
@@ -125,18 +124,18 @@ const MovieView = () => {
 
   return (
     <Container className="mt-5">
-      <Row>
-        <Col lg={{ span: 6, offset: 3 }}>
-          <Card>
+      <Row className="justify-content-center">
+        <Col xs={12} md={8} lg={6}>
+          <Card className="shadow-sm">
             <Card.Body>
-              <Card.Title className='text-center'>{movie.title}</Card.Title>
-              <Card.Subtitle>Director:</Card.Subtitle>
+              <Card.Title className="text-center">{movie.title}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">Director:</Card.Subtitle>
               <Card.Text>{movie.director}</Card.Text>
-              <Card.Subtitle>Year:</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">Year:</Card.Subtitle>
               <Card.Text>{movie.year}</Card.Text>
-              <Card.Subtitle>Description:</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">Description:</Card.Subtitle>
               <Card.Text>{movie.description}</Card.Text>
-              <Card.Subtitle className='pb-2'>Comments:</Card.Subtitle>
+              <Card.Subtitle className="mb-3">Comments:</Card.Subtitle>
               {comments !== null && comments.length > 0 ? (
                 <ul className="list-unstyled">
                   {comments.map((comment, index) => (
@@ -161,7 +160,7 @@ const MovieView = () => {
                     required
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit" className='mt-3'>
+                <Button variant="warning" type="submit" className="mt-3" style={{ backgroundColor: '#FFA81F', border: 'none' }}>
                   Add Comment
                 </Button>
               </Form>

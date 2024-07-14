@@ -15,7 +15,6 @@ const AddMovie = () => {
 
   const [isActive, setIsActive] = useState(false);
 
-  
   useEffect(() => {
     setIsActive(title !== '' && director !== '' && year !== '' && description !== '' && genre !== '');
   }, [title, director, year, description, genre]);
@@ -44,7 +43,7 @@ const AddMovie = () => {
         throw new Error('Failed to add movie');
       }
 
-      const data = await response.json();
+      await response.json(); // Parsing the JSON response without storing it in a variable
 
       Swal.fire({
         icon: 'success',
@@ -52,7 +51,6 @@ const AddMovie = () => {
         text: 'The movie has been added successfully.'
       });
 
-      
       setTitle('');
       setDirector('');
       setYear('');
@@ -76,29 +74,36 @@ const AddMovie = () => {
   return (
     <>
       <h1 className="my-5 text-center">Add Movie</h1>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="mx-auto" style={{ maxWidth: '400px' }}>
         <Form.Group>
-          <Form.Label>Title:</Form.Label>
+          <Form.Label><strong>Title:</strong></Form.Label>
           <Form.Control type="text" placeholder="Enter Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Director:</Form.Label>
+          <Form.Label><strong>Director:</strong></Form.Label>
           <Form.Control type="text" placeholder="Enter Director" value={director} onChange={(e) => setDirector(e.target.value)} required />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Year:</Form.Label>
+          <Form.Label><strong>Year:</strong></Form.Label>
           <Form.Control type="number" placeholder="Enter Year" value={year} onChange={(e) => setYear(e.target.value)} required />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Description:</Form.Label>
+          <Form.Label><strong>Description:</strong></Form.Label>
           <Form.Control as="textarea" rows={3} placeholder="Enter Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Genre:</Form.Label>
+          <Form.Label><strong>Genre:</strong></Form.Label>
           <Form.Control type="text" placeholder="Enter Genre" value={genre} onChange={(e) => setGenre(e.target.value)} required />
         </Form.Group>
-        <Button variant="primary" type="submit" disabled={!isActive} className='mt-3'>
-          Add Movie
+        <Button
+          type="submit"
+          disabled={!isActive}
+          className="btn-block mt-3"
+          style={{ backgroundColor: '#FFA81F', color: 'black', border: 'none' }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#FFD166'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#FFA81F'}
+        >
+          <strong>Add Movie</strong>
         </Button>
       </Form>
     </>

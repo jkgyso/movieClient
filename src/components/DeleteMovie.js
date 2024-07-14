@@ -53,7 +53,11 @@ const DeleteMovie = ({ movieId, fetchData }) => {
     };
 
     return (
-        <Button variant="danger" size="sm" onClick={deleteMovie}>
+        <Button
+            size="sm"
+            onClick={deleteMovie}
+            style={{ backgroundColor: '#26254F', color: 'white' }}
+        >
             Delete
         </Button>
     );

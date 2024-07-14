@@ -1,16 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-import UserContext from '../UserContext';
+import RegisterImage from '../images/register.png';
 
 export default function Register() {
-  const { user } = useContext(UserContext);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mobileNo, setMobileNo] = useState("");
-
   const [isActive, setIsActive] = useState(false);
 
   function registerUser(e) {
@@ -82,45 +79,60 @@ export default function Register() {
   }, [email, password, confirmPassword, mobileNo]);
 
   return (
-    <Form onSubmit={(e) => registerUser(e)}>
-      <h1 className="my-5 text-center">Register</h1>
-      <Form.Group>
-        <Form.Label>Email:</Form.Label>
-        <Form.Control
-          type="email"
-          placeholder="Enter Email"
-          required
-          value={email}
-          onChange={e => setEmail(e.target.value)} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Mobile Number:</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter Mobile Number"
-          required
-          value={mobileNo}
-          onChange={e => setMobileNo(e.target.value)} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Password:</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Enter Password"
-          required
-          value={password}
-          onChange={e => setPassword(e.target.value)} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Confirm Password:</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Confirm Password"
-          required
-          value={confirmPassword}
-          onChange={e => setConfirmPassword(e.target.value)} />
-      </Form.Group>
-      <Button variant="primary" type="submit" disabled={!isActive} className='mt-3'>Submit</Button>
-    </Form>
+    <Container fluid>
+      <Row className="justify-content-center mt-5">
+        <Col xs={12} md={6} className="p-4" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', border: '2px solid #26254F' }}>
+          <Form onSubmit={(e) => registerUser(e)}>
+            <h1 className="my-5 text-center">Register</h1>
+            <Form.Group className="mb-3">
+              <strong style={{ color: 'black', display: 'block', marginBottom: '0.5rem' }}>Email:</strong>
+              <Form.Control
+                type="email"
+                placeholder="Enter Email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <strong style={{ color: 'black', display: 'block', marginBottom: '0.5rem' }}>Mobile Number:</strong>
+              <Form.Control
+                type="text"
+                placeholder="Enter Mobile Number"
+                required
+                value={mobileNo}
+                onChange={e => setMobileNo(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <strong style={{ color: 'black', display: 'block', marginBottom: '0.5rem' }}>Password:</strong>
+              <Form.Control
+                type="password"
+                placeholder="Enter Password"
+                required
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <strong style={{ color: 'black', display: 'block', marginBottom: '0.5rem' }}>Confirm Password:</strong>
+              <Form.Control
+                type="password"
+                placeholder="Confirm Password"
+                required
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="warning" type="submit" disabled={!isActive} className='mt-3' style={{ backgroundColor: '#FFA81F', border: 'none' }}>Submit</Button>
+          </Form>
+        </Col>
+        <Col xs={12} md={6} className="p-0">
+          <>
+            <img src={RegisterImage} alt="Register" className="img-fluid" />
+          </>
+        </Col>
+      </Row>
+    </Container>
   );
 }

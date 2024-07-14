@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
@@ -23,25 +23,31 @@ export default function EditMovie({ movie, fetchData }) {
     const openEdit = () => setShowEdit(true);
     const closeEdit = () => setShowEdit(false);
 
-    const editMovie = (e) => {
+    const editMovie = async (e) => {
         e.preventDefault();
 
-        fetch(`https://movieappapi-6awg.onrender.com/movies/updateMovie/${movie._id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify({
-                title,
-                director,
-                year,
-                description,
-                genre,
-            }),
-        })
-        .then((res) => res.json())
-        .then((data) => {
+        try {
+            const response = await fetch(`https://movieappapi-6awg.onrender.com/movies/updateMovie/${movie._id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    title,
+                    director,
+                    year,
+                    description,
+                    genre,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update movie');
+            }
+
+            const data = await response.json();
+
             if (data.message === 'Movie updated successfully') {
                 Swal.fire({
                     title: 'Success',
@@ -50,47 +56,41 @@ export default function EditMovie({ movie, fetchData }) {
                 });
 
                 // Update local state
-                setTitle(title);
-                setDirector(director);
-                setYear(year);
-                setDescription(description);
-                setGenre(genre);
-
-                closeEdit();
                 fetchData(); // Update moviesData in AdminView
+                closeEdit();
             } else {
                 Swal.fire({
                     title: 'Error',
                     icon: 'error',
                     text: 'Failed to update movie',
                 });
-
-                closeEdit();
             }
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error('Error updating movie:', error);
             Swal.fire({
                 title: 'Error',
                 icon: 'error',
                 text: 'Failed to update movie',
             });
-            closeEdit();
-        });
+        }
     };
 
     return (
         <>
-            <Button variant="primary" size="sm" onClick={openEdit}>
+            <Button
+                size="sm"
+                onClick={openEdit}
+                style={{ backgroundColor: '#FFA81F', color: 'black', marginBottom: '1rem' }}
+            >
                 Edit
             </Button>
 
-            <Modal show={showEdit} onHide={closeEdit}>
-                <Form onSubmit={editMovie}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Movie</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+            <Modal show={showEdit} onHide={closeEdit} dialogClassName="modal-90w">
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Movie</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={editMovie}>
                         <Form.Group controlId="title">
                             <Form.Label>Title</Form.Label>
                             <Form.Control
@@ -141,16 +141,17 @@ export default function EditMovie({ movie, fetchData }) {
                                 required
                             />
                         </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={closeEdit}>
-                            Close
-                        </Button>
-                        <Button variant="success" type="submit">
+
+                        <Button type="submit" className='mt-3' style={{ backgroundColor: '#FFA81F', color: 'black' }}>
                             Submit
                         </Button>
-                    </Modal.Footer>
-                </Form>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={closeEdit}>
+                        Close
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </>
     );

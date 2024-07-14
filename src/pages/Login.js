@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import UserContext from '../UserContext';
 
@@ -83,11 +83,11 @@ export default function Login() {
     return (
         <Container>
             <Row className="justify-content-center mt-5">
-                <Col xs={12} md={8} lg={6} className="login-box p-4">
+                <Col xs={12} md={8} lg={6} className="login-box p-4" style={{ backgroundColor: 'white', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', border: '2px solid #26254F' }}>
                     <Form onSubmit={(e) => authenticate(e)}>
-                        <h1 className="text-center p-2">Login</h1>
-                        <Form.Group controlId="userEmail">
-                            <Form.Label>Email address</Form.Label>
+                        <h1 className="text-center mb-4">Login</h1>
+                        <Form.Group controlId="userEmail" className="mb-3">
+                            <Form.Label><strong>Email address</strong></Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter email"
@@ -97,8 +97,8 @@ export default function Login() {
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="password">
-                            <Form.Label>Password</Form.Label>
+                        <Form.Group controlId="password" className="mb-3">
+                            <Form.Label><strong>Password</strong></Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Password"
@@ -108,18 +108,17 @@ export default function Login() {
                             />
                         </Form.Group>
 
-                        <div className="d-flex justify-content-center p-3">
-                            {isActive ? 
-                                <Button variant="primary" type="submit" id="submitBtn">
-                                    Submit
-                                </Button>
-                            : 
-                                <Button variant="danger" type="submit" id="submitBtn" disabled>
-                                    Submit
-                                </Button>
-                            }
+                        <div className="d-grid gap-2 mb-3">
+                            <Button variant="primary" type="submit" disabled={!isActive} style={{ backgroundColor: '#FFA81F', borderColor: '#FFA81F', color: 'black', width: '100%' }}><strong>
+                                Submit</strong>
+                            </Button>
                         </div>
                     </Form>
+                    <div className="text-center mt-3">
+                        <p>
+                            Don't have an account? <Link to="/register" style={{ color: '#FFA81F' }}>Register here</Link>
+                        </p>
+                    </div>
                 </Col>
             </Row>
         </Container>
